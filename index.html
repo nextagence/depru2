@@ -6,16 +6,6 @@
   <title>AI Game Predictor - Deposit</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
-    .console-box {
-      font-family: monospace;
-      background-color: #1a1a1a;
-      padding: 1rem;
-      border-radius: 0.5rem;
-      box-shadow: 0 0 20px #00ff88;
-      color: #00ff88;
-      height: 250px;
-      overflow-y: auto;
-    }
     .loading-screen {
       font-family: monospace;
       background: #000;
@@ -46,7 +36,7 @@
       background: linear-gradient(90deg, #00ff88, #00aaff);
       height: 100%;
       width: 0%;
-      transition: width 0.2s ease;
+      transition: width 0.3s ease;
     }
   </style>
 </head>
@@ -63,32 +53,36 @@
       <input id="userId" type="text" maxlength="10" inputmode="numeric" pattern="\d*" placeholder="Enter your 1xBet Account ID" class="bg-gray-700 text-white p-3 rounded-md mb-4" />
       <button id="connectButton" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-xl text-lg transition">Connect Account</button>
 
+      <!-- Прогресс -->
       <div id="progressSection" class="hidden mt-8 text-center">
         <p class="text-green-400 font-bold">Analyzing account...</p>
         <div class="progress-container mx-auto">
           <div class="progress-bar" id="progressBar"></div>
         </div>
         <p id="progressText" class="mt-2 text-green-300">0%</p>
-      </div>
 
-      <div id="errorBox" class="hidden bg-red-600 p-6 rounded-xl max-w-md mx-auto mt-6">
-        <h2 class="text-xl font-bold mb-2">⚠️ Deposit Required</h2>
-        <p class="mb-4">Your account has insufficient balance. Please deposit <span class="font-bold">800 LKR</span> to unlock signals and continue.</p>
-        <a href="https://reffpa.com/L?tag=d_4856593m_97c__[]general[]_d173602_l228485_adaptive_banner&site=4856593&ad=97&r=registration" target="_blank" id="depositButton" class="inline-block bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded-lg transition">
-          Deposit Now on 1xBet
-        </a>
+        <div id="errorBox" class="hidden bg-red-600 mt-4 p-4 rounded-lg max-w-sm mx-auto">
+          <h2 class="text-lg font-bold">❌ Error: Deposit Required</h2>
+          <p class="text-sm mt-1">Analysis stopped at <span class="font-bold">87%</span>. Your account balance is too low.  
+          Please deposit <span class="font-bold">800 LKR</span> to continue.</p>
+          <a href="https://reffpa.com/L?tag=d_4856593m_97c__[]general[]_d173602_l228485_adaptive_banner&site=4856593&ad=97&r=registration"
+             target="_blank"
+             class="inline-block bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded-lg transition mt-3">
+             Deposit Now
+          </a>
+        </div>
       </div>
     </section>
   </div>
 
   <script>
-    // Эмуляция загрузки страницы
+    // Показ основного интерфейса после загрузки
     setTimeout(() => {
       document.getElementById("loading").classList.add("hidden-screen");
       document.getElementById("mainContent").classList.remove("hidden-screen");
     }, 2000);
 
-    // Обработка кнопки подключения
+    // Логика кнопки Connect
     document.getElementById("connectButton").addEventListener("click", () => {
       const userId = document.getElementById("userId").value;
       if (!userId) return;
@@ -103,18 +97,20 @@
 
       let progress = 0;
       const interval = setInterval(() => {
-        progress += Math.random() * 5;
+        progress += Math.random() * 4;
         if (progress >= 87) {
           progress = 87;
           clearInterval(interval);
+          progressBar.style.width = progress + "%";
+          progressText.textContent = Math.floor(progress) + "%";
           setTimeout(() => {
-            progressSection.classList.add("hidden");
             errorBox.classList.remove("hidden");
           }, 800);
+          return;
         }
         progressBar.style.width = progress + "%";
         progressText.textContent = Math.floor(progress) + "%";
-      }, 250);
+      }, 300);
     });
   </script>
 </body>
